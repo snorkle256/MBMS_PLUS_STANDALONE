@@ -1,5 +1,7 @@
 # Description: Default compose file, with host port for musicbrainz
 
+x-require-env: ${COMPOSE_PROFILES?You need to edit the .env file before starting. Uncomment COMPOSE_PROFILES=mbms.}
+
 volumes:
   mqdata:
     driver: local
