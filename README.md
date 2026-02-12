@@ -10,13 +10,13 @@
 >
 > This container stack is exclusively for personal use. **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
 
-_The initial "compose up" will start a 3.5GB download, with the full installation after setup needing an additional 300GB. **This setup takes at least a few hours.**_
+_The initial "compose up" will start with 3.5GB download, and the full installation after setup needs an additional 300GB. **This setup takes at least a few hours.**_
+
+It's recommended to install onto a volume with at least 500GB free to allow for future replication and updates.
 
 > [!TIP]
 >
-> It's recommended you install onto a volume with at least 500GB free to allow for future replication and updates.
->
-> If you're deploying from a terminal session, it's strongly recommended to use screen or tmux so the compose process can continue running if your terminal session drops (closing the window, computer goes to sleep, etc.)
+> If you're deploying from a terminal session, use screen or tmux so the compose process can continue running if your terminal session drops (closing the window, computer goes to sleep, etc.)
 
 ## Quick start
 
@@ -25,7 +25,7 @@ _The initial "compose up" will start a 3.5GB download, with the full installatio
 - Create an account at https://MusicBrainz.com
 - Get your _Live Data Feed Access Token_ from Metabrainz https://metabrainz.org/profile
 
-### 2. Download the MBMS_PLUS project (small/quick)
+### 2. Download the MBMS_PLUS project - Small and quick
 
 ```
 mkdir -p /opt/docker/
@@ -44,7 +44,7 @@ Edit `.env` (top section) before first run:
 - `MUSICBRAINZ_WEB_SERVER_PORT` ('5000' default, edit as needed)
 - Optional provider keys/tokens for LM-Bridge (Cover Art Archive/Fanart/Last.FM)
 
-### 4. Start the containers download and startup - LARGE / HOURS
+### 4. Start the containers download and startup - 300GB, Takes hours
 
 ```
 docker compose up -d
