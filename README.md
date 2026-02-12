@@ -14,10 +14,6 @@ _It's recommended to install onto a volume with at least 500GB free to allow for
 >
 > If you're deploying from a terminal session, use screen or tmux so the compose process can continue running if your terminal session drops (closing the window, computer goes to sleep, etc.)
 
-> [!CAUTION]
->
-> This container stack is exclusively for personal use. **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
-
 ## Quick start
 
 ### 1. Register for MusicBrainz access (REQUIRED)
@@ -26,8 +22,6 @@ _It's recommended to install onto a volume with at least 500GB free to allow for
 - Get your _Live Data Feed Access Token_ from Metabrainz https://metabrainz.org/profile
 
 ### 2. Download the MBMS_PLUS project
-
-Small and quick download
 
 ```
 mkdir -p /opt/docker/
@@ -47,8 +41,6 @@ Edit `.env` (top section) before first run:
 - Optional provider keys/tokens for LM-Bridge (Cover Art Archive/Fanart/Last.FM)
 
 ### 4. Download containers, build DB & startup
-
-3.5GB container download and then 300GB data download. The DB build & indexing takes hours to complete.
 
 ```
 docker compose up -d
@@ -78,8 +70,12 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP_Add
 
 ## Notes
 
-- First import and indexing will take hours and requires up to 300GB of available storage
+- _The first import and indexing will take hours and requires up to 300GB of available storage_
 - This stack is intended for private use on a LAN behind a firewall; don't expose services publicly without hardening
+
+> [!CAUTION]
+>
+> This container stack is exclusively for personal use. **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
 
 ### Source code, licenses and development repo:
 

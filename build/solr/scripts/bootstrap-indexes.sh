@@ -55,6 +55,9 @@ fi
 
 SOLR_STARTED=0
 if command -v solr >/dev/null 2>&1; then
+  SOLR_HOME_DIR="${SOLR_HOME:-/var/solr/data}"
+  mkdir -p "$SOLR_HOME_DIR"
+  export SOLR_HOME="$SOLR_HOME_DIR"
   if command -v curl >/dev/null 2>&1; then
     if ! curl -fsS http://localhost:8983/solr/admin/info/system >/dev/null 2>&1; then
       log "Starting temporary Solr instance for bootstrap."
