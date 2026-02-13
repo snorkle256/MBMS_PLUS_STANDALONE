@@ -20,7 +20,7 @@
 
 ## Quick start
 
-### 1. Register for MusicBrainz access
+### 1. Register for MusicBrainz access & token
 
 - Create an account at https://MusicBrainz.com
 - Get your _Live Data Feed Access Token_ from Metabrainz https://metabrainz.org/profile
@@ -81,7 +81,7 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP:500
 - This stack is configured for private use on a LAN, behind a firewall
 - _Don't expose services publicly without hardening_
 
-> [!INFO]
+> [!NOTE]
 >
 > MBMS PLUS is for personal use: **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
 
