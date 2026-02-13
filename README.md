@@ -6,13 +6,13 @@
 
 **_MusicBrainz Mirror Server PLUS - Full stack with Lidarr API Bridge_**
 
-The initial "compose up" will start with a 3.5GB download, and the full installation after setup needs an additional 300GB. **This setup takes at least a few hours.**
+The initial "compose up" will start with a 3.5GB download, and the full installation during and after setup needs an additional 300GB and a few hours to run.
 
 _It's recommended to install onto a volume with at least 500GB free to allow for future replication and updates._
 
 > [!TIP]
 >
-> If you're deploying from a terminal session, use screen or tmux so the compose process can continue running if your terminal session drops (closing the window, computer goes to sleep, etc.)
+> When deploying from a terminal, use screen or tmux so the compose process can continue running if your session drops (closing the window, computer goes to sleep, etc.)
 
 ## Quick start
 
@@ -57,8 +57,9 @@ docker compose logs -f --timestamps
 Or with less "noise"
 
 ```
-docker compose logs -f --no-log-prefix \
+docker compose logs -f --no-log-prefix --tail=200 \
   bootstrap search-bootstrap search musicbrainz indexer indexer-cron lmbridge
+
 ```
 
 When finished, your MusicBrainz mirror will be available at **http://HOST_IP_Address:5000**
@@ -66,14 +67,16 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP_Add
 
 > [!TIP]
 >
-> Put a reverse proxy (NPM, Caddy, Traefik, SWAG) in front of your host IP and use your own (sub)domain to reach your MusicBrainz mirror on port 80 (HTTP) or 443 (HTTPS)
+> Put a reverse proxy (NPM, Caddy, Traefik, SWAG) in front of your host IP and use your own (sub)domain to reach your MusicBrainz mirror on port 80 (HTTP) or 443 (HTTPS) on your LAN
 
 ## Notes
 
-- _The first import and indexing will take hours and requires up to 300GB of available storage_
+- _The first import and database setup will take multiple hours and requires up to 300GB of available storage_
+- Building Materialized/denormalized tables adds additioonal GB of storage but offers significant performance improvements
+- 60GB of pre-built search indexes are downloaded to save a significant amount of time building new indexes
 - This stack is intended for private use on a LAN behind a firewall; don't expose services publicly without hardening
 
-> [!CAUTION]
+> [!INFORMATION]
 >
 > This container stack is exclusively for personal use. **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
 

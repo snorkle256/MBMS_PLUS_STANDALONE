@@ -53,6 +53,20 @@ if ! command -v load-backup-archives >/dev/null 2>&1; then
   exit 1
 fi
 
+BACKUP_DIR_CACHE="/var/cache/musicbrainz/solr-backups"
+BACKUP_DIR_SOLR="/var/solr/solr-backups"
+
+mkdir -p "$BACKUP_DIR_CACHE"
+if [ ! -e "$BACKUP_DIR_SOLR" ]; then
+  ln -s "$BACKUP_DIR_CACHE" "$BACKUP_DIR_SOLR"
+elif [ -d "$BACKUP_DIR_SOLR" ] && [ -z "$(ls -A "$BACKUP_DIR_SOLR" 2>/dev/null)" ]; then
+  rmdir "$BACKUP_DIR_SOLR" || true
+  ln -s "$BACKUP_DIR_CACHE" "$BACKUP_DIR_SOLR"
+fi
+
+export SOLR_BACKUP_DIR="$BACKUP_DIR_CACHE"
+export SOLR_BACKUP_ARCHIVE_DIR="$BACKUP_DIR_CACHE"
+
 SOLR_STARTED=0
 if command -v solr >/dev/null 2>&1; then
   SOLR_HOME_DIR="${SOLR_HOME:-/var/solr/data}"
