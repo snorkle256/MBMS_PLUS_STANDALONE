@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 ARG GITHUB_TOKEN
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 2. Install EVERYTHING needed for building C extensions and Perl deps
+# 2. Install all build-time and run-time dependencies
 RUN apt-get update && apt-get install -y \
     supervisor \
     postgresql-14 \
@@ -26,13 +26,15 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Build MusicBrainz Postgres Extensions
-# We use 'mkdir -p /src' to be safe and verify directory existence
+# We now use 'make clean' and 'make' separately to ensure a fresh build environment
 WORKDIR /src
 RUN git clone https://github.com/metabrainz/musicbrainz-docker.git && \
     cd musicbrainz-docker/postgresql/musicbrainz-collate && \
+    make clean && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config install && \
     cd ../musicbrainz-unaccent && \
+    make clean && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config install && \
     cd / && rm -rf /src/musicbrainz-docker
@@ -54,7 +56,7 @@ ENV MB_DB_USER=musicbrainz
 ENV MB_DB_PASS=musicbrainz
 ENV BRIDGE_PORT=5001
 
-# 6. Copy Configs (Must be in your repo root)
+# 6. Copy Configs (Ensure start-script.sh and supervisord.conf are in repo root)
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY start-script.sh /usr/local/bin/start-script.sh
 
