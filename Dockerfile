@@ -4,8 +4,7 @@ FROM ubuntu:22.04
 ARG GITHUB_TOKEN
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 2. Install everything. 
-# Added icu-devtools and libicu-dev which are the heart of the "Exit 2" error.
+# 2. Install all dependencies
 RUN apt-get update && apt-get install -y \
     supervisor \
     postgresql-14 \
@@ -31,16 +30,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 RUN git clone https://github.com/metabrainz/musicbrainz-docker.git
 
-# Build Collate - We use absolute paths to ensure the compiler doesn't get lost
+# Collate (Removed 'make clean')
 WORKDIR /src/musicbrainz-docker/postgres-extension/musicbrainz-collate
-RUN make clean && \
-    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
+RUN make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config install
 
-# Build Unaccent
+# Unaccent (Removed 'make clean')
 WORKDIR /src/musicbrainz-docker/postgres-extension/musicbrainz-unaccent
-RUN make clean && \
-    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
+RUN make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config install
 
 # 4. Clone and Setup Your Forked Repositories
@@ -60,7 +57,7 @@ ENV MB_DB_USER=musicbrainz
 ENV MB_DB_PASS=musicbrainz
 ENV BRIDGE_PORT=5001
 
-# 6. Copy Configs (Must be in your repo root)
+# 6. Copy Configs
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY start-script.sh /usr/local/bin/start-script.sh
 
