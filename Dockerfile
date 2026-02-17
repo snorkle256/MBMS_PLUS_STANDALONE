@@ -29,15 +29,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 RUN git clone https://github.com/metabrainz/musicbrainz-docker.git
 
-# Collate - Using explicit PKG_CONFIG to resolve ICU paths
+# Build Collate
 WORKDIR /src/musicbrainz-docker/postgres-extension/musicbrainz-collate
+# We use || { ... } to catch the error and print the build log before exiting
 RUN make clean && \
-    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config \
-         SHLIB_LINK="$(pkg-config --libs icu-i18n)" \
-         CUSTOM_COPT="$(pkg-config --cflags icu-i18n)" && \
+    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config || { cat /tmp/*.log; exit 1; } && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config install
 
-# Unaccent
+# Build Unaccent
 WORKDIR /src/musicbrainz-docker/postgres-extension/musicbrainz-unaccent
 RUN make clean && \
     make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config && \
