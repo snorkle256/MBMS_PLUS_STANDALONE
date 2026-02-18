@@ -1,24 +1,27 @@
 #!/bin/bash
 set -e
 
-# Path to the Postgres 14 data directory
-PGDATA="/var/lib/postgresql/14/main"
+PGDATA="/var/lib/postgresql/16/main"
+PGCONFIG="/etc/postgresql/16/main"
 
-# 1. Ensure the directory exists and has the right permissions
-# This is crucial for Proxmox Bind Mounts to work without 'Permission Denied'
+# 1. Fix Permissions
 mkdir -p "$PGDATA"
 chown -R postgres:postgres /var/lib/postgresql/
 chmod 700 "$PGDATA"
 
-# 2. Initialize Postgres if the directory is empty
+# 2. Initialize PostgreSQL 16
 if [ -z "$(ls -A "$PGDATA")" ]; then
-    echo "First run detected: Initializing PostgreSQL 14 database..."
-    sudo -u postgres /usr/lib/postgresql/14/bin/initdb -D "$PGDATA"
+    echo "First run: Initializing PostgreSQL 16..."
+    sudo -u postgres /usr/lib/postgresql/16/bin/initdb -D "$PGDATA"
+    
+    if [ ! -f "$PGCONFIG/postgresql.conf" ]; then
+        mkdir -p "$PGCONFIG"
+        cp /usr/share/postgresql/16/postgresql.conf.sample "$PGCONFIG/postgresql.conf"
+        chown -R postgres:postgres "$PGCONFIG"
+    fi
 fi
 
-# 3. Clean up any stale PID files (prevents startup loops)
+# 3. Cleanup and Launch
 rm -f /var/run/supervisord.pid
-
-# 4. Start Supervisor
-echo "Starting Supervisor to manage MusicBrainz Services..."
+echo "Launching Supervisor..."
 exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf
