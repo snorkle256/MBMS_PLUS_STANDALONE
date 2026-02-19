@@ -15,12 +15,14 @@ RUN apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release 
     nodejs npm sudo && rm -rf /var/lib/apt/lists/*
 
 # 2. Build Extensions (Using your Token + your Fork)
+2. Build Extensions (Using your Token + your Fork)
 WORKDIR /src
 
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
+    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
-
+    
 RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-unaccent.git && \
     cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
