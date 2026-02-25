@@ -19,8 +19,9 @@ WORKDIR /src
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    CFLAGS="-I/usr/include/postgresql/16/server -fPIC" \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
+    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config \
+         CFLAGS="-I/usr/include/postgresql/16/server -fPIC" \
+         with_llvm=no install
 
 # 3. Build Unaccent (Your Fork)
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-unaccent.git && \
