@@ -20,9 +20,9 @@ WORKDIR /src
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    # Passing variables as arguments to make is the most reliable method
+    # We add -DPOSTGRESOS_H to bypass some OS-level include conflicts
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config \
-         PG_CPPFLAGS="-I/usr/include/postgresql/16/server" \
+         PG_CPPFLAGS="-I/usr/include/postgresql/16/server -DPOSTGRES_CORE" \
          with_llvm=no install
 
 # 3. Build Unaccent
